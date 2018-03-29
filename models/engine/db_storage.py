@@ -10,6 +10,10 @@ import os
 import models
 from models.city import City
 from models.state import State
+from models.amenity import Amenity
+from models.user import User
+from models.place import Place
+from models.review import Review
 
 
 class DBStorage:
@@ -59,7 +63,7 @@ class DBStorage:
                 key = '{}.{}'.format(obj.__class__.__name__, obj.id)
                 all_objects[key] = obj
         else:
-            db_list = [City, State]
+            db_list = [City, State, User, Amenity, Review, Place]
             for cls in db_list:
                 for obj in self.__session.query(cls).all():
                     key = '{}.{}'.format(obj.__class__.__name__, obj.id)
