@@ -1,19 +1,33 @@
 #!/usr/bin/python3
 '''
-    DBStorage Engine
+   This module contains a test suite for the MySQL database storage engine of
+   the AirBnB clone.
 '''
-
+import os
+import time
+import unittest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-from models.base_model import Base
-import os
-import models
+from models.base_model import BaseModel, Base
+from models.engine.db_storage import DBStorage
 from models.city import City
 from models.state import State
-from models.amenity import Amenity
-from models.user import User
-from models.place import Place
-from models.review import Review
+
+
+class TestDBStorage(unittest.TestCase):
+    '''
+       Class containing tests for the MySQL database.
+    '''
+    engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
+                                      format(user, password, host, database),
+                                      pool_pre_ping=True)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    def setUp(self):
+        Base.metadata.create_all(self.engine)
+        self.session
+
 
 
 class DBStorage:
@@ -63,7 +77,7 @@ class DBStorage:
                 key = '{}.{}'.format(obj.__class__.__name__, obj.id)
                 all_objects[key] = obj
         else:
-            db_list = [City, State, User, Amenity, Review, Place]
+            db_list = [City, State]
             for cls in db_list:
                 for obj in self.__session.query(cls).all():
                     key = '{}.{}'.format(obj.__class__.__name__, obj.id)
