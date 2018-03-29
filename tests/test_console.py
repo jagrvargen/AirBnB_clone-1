@@ -3,11 +3,14 @@
 
 
 import sys
+import os
 import models
 import unittest
 from io import StringIO
 from console import HBNBCommand
 from unittest.mock import create_autospec
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship, backref
 
 
 class test_console(unittest.TestCase):
@@ -46,17 +49,18 @@ class test_console(unittest.TestCase):
         '''
             Testing that show exists
         '''
-        console = self.create()
-        console.onecmd("create User")
-        user_id = self.capt_out.getvalue()
-        sys.stdout = self.backup
-        self.capt_out.close()
-        self.capt_out = StringIO()
-        sys.stdout = self.capt_out
-        console.onecmd("show User " + user_id)
-        x = (self.capt_out.getvalue())
-        sys.stdout = self.backup
-        self.assertTrue(str is type(x))
+        if os.getenv('HBNB_TYPE_STORAGE') != 'db':
+            console = self.create()
+            console.onecmd("create User name=\"John\" email=\"x@x.com\"")
+            user_id = self.capt_out.getvalue()
+            sys.stdout = self.backup
+            self.capt_out.close()
+            self.capt_out = StringIO()
+            sys.stdout = self.capt_out
+            console.onecmd("show User " + user_id)
+            x = (self.capt_out.getvalue())
+            sys.stdout = self.backup
+            self.assertTrue(str is type(x))
 
     def test_show_class_name(self):
         '''
@@ -95,7 +99,7 @@ class test_console(unittest.TestCase):
             Test show message error for id missing
         '''
         console = self.create()
-        console.onecmd("create User")
+        console.onecmd("create user")
         user_id = self.capt_out.getvalue()
         sys.stdout = self.backup
         self.capt_out.close()
@@ -114,6 +118,39 @@ class test_console(unittest.TestCase):
         console.onecmd("create User")
         self.assertTrue(isinstance(self.capt_out.getvalue(), str))
 
+    def test_model_with_kwargs_gets_attributes_set(self):
+        '''
+            Test that a model's attributes get set in db if keyword args are
+            supplied.
+        '''
+        if (os.getenv('HBNB_TYPE_STORAGE') == 'db'):
+            from sqlalchemy import create_engine
+            from sqlalchemy.orm import sessionmaker
+            from sqlalchemy.ext.declarative import declarative_base
+            user = os.getenv('HBNB_MYSQL_USER')
+            password = os.getenv('HBNB_MYSQL_PWD')
+            host = os.getenv('HBNB_MYSQL_HOST')
+            database = os.getenv('HBNB_MYSQL_DB')
+
+            # Request a connection with the database once required
+            self.engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
+                                          format(user, password, host, database),
+                                          pool_pre_ping=True)
+            Base = declarative_base()
+            Session = sessionmaker(bind=self.engine)
+            self.session = Session()
+            Base.metadata.create_all(self.engine)
+            console = self.create()
+            console.onecmd("create State name='California'")
+            user_id = self.capt_out.getvalue()
+            sys.stdout = self.backup
+            self.capt_out.close()
+            from models.state import State
+            query = self.session.query(State).all()
+            self.assertEqual('California', user_id)
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', 'filestorage' +
+                     'engine doesn\'t need kwargs')
     def test_create_adds_parameters_to_instances_attributes(self):
         '''
             Testing that do_create adds parameters to the instance's attrs
