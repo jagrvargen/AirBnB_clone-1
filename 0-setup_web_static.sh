@@ -2,7 +2,6 @@
 # Create necessary directories.
 mkdir -p /data/web_static/releases/test/
 mkdir -p /data/web_static/shared/
-mkdir -p /data/web_static/current/
 
 # Add index.html file and add simple content for testing purposes.
 touch /data/web_static/releases/test/index.html
@@ -16,7 +15,7 @@ echo -e "<html>
 
 # Create symbolic link between /data/web_static/current and
 # /data/web_static/releases/test/.
-ln -sf /data/web_static/current /data/web_static/releases/test/
+ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 # Grant ownership of /data/ recursively to both user and group.
 chown -R ubuntu:ubuntu /data/
