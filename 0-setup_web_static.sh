@@ -2,6 +2,7 @@
 # Create necessary directories.
 mkdir -p /data/web_static/releases/test/
 mkdir -p /data/web_static/shared/
+mkdir -p /data/web_static/current/
 
 # Add index.html file and add simple content for testing purposes.
 touch /data/web_static/releases/test/index.html
