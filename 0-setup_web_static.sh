@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Update and install Nginx
+apt-get -y update
+apt-get -y install nginx
+
 # Create necessary directories.
 mkdir -p /data/web_static/releases/test/
 mkdir -p /data/web_static/shared/
@@ -11,7 +15,7 @@ echo -e "<html>
   <body>
     Holberton School
   </body>
-</html>\n" > /data/web_static/releases/test/index.html
+</html>" > /data/web_static/releases/test/index.html
 
 # Create symbolic link between /data/web_static/current and
 # /data/web_static/releases/test/.
