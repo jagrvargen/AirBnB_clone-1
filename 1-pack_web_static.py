@@ -18,6 +18,3 @@ def do_pack():
         return my_file
     else:
         return None
-
-if __name__ == "__main__":
-    do_pack()
