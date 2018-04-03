@@ -23,6 +23,7 @@ def do_pack():
     else:
         return None
 
+
 def do_deploy(archive_path):
     if not archive_path:
         return False
@@ -53,13 +54,14 @@ def do_deploy(archive_path):
         # Delete old symbolic link and create a new one.
         sudo("rm -rf /data/web_static/current")
         sudo("ln -s /data/web_static/releases/{}/ /data/web_static/current"
-            .format(path_name))
+             .format(path_name))
 
         print("New version deployed!")
         return True
 
     except:
         return False
+
 
 def deploy():
     # Call the do_pack function which creates a tar file from the
