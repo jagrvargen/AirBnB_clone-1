@@ -16,8 +16,8 @@ def do_pack():
     my_file = Path("versions/{}".format(archive))
     if my_file.is_file():
         return my_file
-
-    return None
+    else:
+        return None
 
 if __name__ == "__main__":
     do_pack()
