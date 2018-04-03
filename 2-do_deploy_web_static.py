@@ -40,7 +40,7 @@ def do_deploy(archive_path):
         # Delete old symbolic link and create a new one.
         run("rm -rf /data/web_static/current")
         run("ln -s /data/web_static/releases/{}/ /data/web_static/current"
-             .format(path_name))
+            .format(path_name))
 
         print("New version deployed!")
         return True
