@@ -11,6 +11,7 @@ def do_pack():
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     archive = "web_static_" + timestamp + ".tgz"
 
+    local("mkdir -p versions")
     local("tar -cvzf versions/{} web_static/".format(archive))
 
     my_file = Path("versions/{}".format(archive))
