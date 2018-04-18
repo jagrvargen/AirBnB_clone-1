@@ -58,7 +58,8 @@ class DBStorage:
         '''
         all_objects = {}
         if cls:
-            query = self.__session.query(cls).all()
+            instance = models.classes[cls]
+            query = self.__session.query(instance).all()
             for obj in query:
                 key = '{}.{}'.format(obj.__class__.__name__, obj.id)
                 all_objects[key] = obj
@@ -105,4 +106,11 @@ class DBStorage:
         Base.metadata.create_all(self.__engine)
         Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(Session)
-        self.__session = Session()
+        self.__session = Session
+
+    def close(self):
+        '''
+           Calls the remove() method on the private session attribute
+           self.__session.
+        '''
+        self.__session.remove()

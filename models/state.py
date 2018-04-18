@@ -7,6 +7,7 @@ from sqlalchemy import Integer, String, Column, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 import os
+import models
 
 
 class State(BaseModel, Base):
@@ -23,16 +24,22 @@ class State(BaseModel, Base):
             `BaseModel.updated_at`
     '''
 
-    @property
-    def cities(self):
-        '''Getter method that returns the list of City instances for
-        FileStorage engine.'''
-        city_list = []
-        for city in self.cities:
-            if self.id == city.state_id:
-                city_list.append(city)
-        return city_list
+    if os.getenv("HBNB_TYPE_STORAGE") != "db":
+        @property
+        def cities(self):
+            '''Getter method that returns the list of City instances for
+            FileStorage engine.'''
+            city_list = []
+            all_cities = models.storage.all()
+            for key, value in all_cities.items():
+                try:
+                    if self.id == value.state_id:
+                        city_list.append(value)
+                except AttributeError:
+                    pass
+            return city_list
 
+    else:
+        cities = relationship('City', cascade='all, delete', backref='state')
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
-    cities = relationship('City', cascade='all, delete', backref='state')

@@ -22,7 +22,14 @@ class FileStorage:
             using the `new()` method. If it is 'db', a list of all objects in
             the MySQL database will be returned.
         '''
-        return self.__objects
+        if cls:
+            obj_dict = {}
+            for key, value in self.__objects.items():
+                if cls.__name__ in key:
+                    obj_dict[key] = value
+            return obj_dict
+        else:
+            return self.__objects
 
     def new(self, obj):
         '''
@@ -69,3 +76,9 @@ class FileStorage:
         # to this method
         FileStorage.__objects = {k: v for k, v in FileStorage.__objects.items()
                                  if v.id != obj.id}
+
+    def close(self):
+        '''
+           Calls the reload method.
+        '''
+        self.reload()
