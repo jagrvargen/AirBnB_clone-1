@@ -13,9 +13,11 @@ app = Flask(__name__)
 def hello_route():
     return "Hello HBNB!"
 
+
 @app.route("/hbnb/", strict_slashes=False)
 def hbnb():
     return "HBNB"
+
 
 @app.route("/c/<string:text>/", strict_slashes=False)
 def c(text):
@@ -23,12 +25,14 @@ def c(text):
         new = text.replace("_", " ")
     return "C {}".format(new)
 
+
 @app.route("/python", defaults={"text": "is cool"}, strict_slashes=False)
 @app.route("/python/<string:text>", strict_slashes=False)
 def python(text):
     if text:
         new = text.replace("_", " ")
         return "Python {}".format(new)
+
 
 @app.route("/number/<int:n>", strict_slashes=False)
 def number(n):
