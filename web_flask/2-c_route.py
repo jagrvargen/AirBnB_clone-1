@@ -13,9 +13,11 @@ app = Flask(__name__)
 def hello_route():
     return "Hello HBNB!"
 
+
 @app.route("/hbnb/", strict_slashes=False)
 def hbnb():
     return "HBNB"
+
 
 @app.route("/c/<string:text>/", strict_slashes=False)
 def c(text):
