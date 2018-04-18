@@ -58,7 +58,7 @@ class DBStorage:
         '''
         all_objects = {}
         if cls:
-            instance = models.classes[cls]
+            instance = models.classes[cls.__name__]
             query = self.__session.query(instance).all()
             for obj in query:
                 key = '{}.{}'.format(obj.__class__.__name__, obj.id)
