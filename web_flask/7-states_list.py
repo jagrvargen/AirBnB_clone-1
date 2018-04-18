@@ -10,7 +10,6 @@ from models import State
 app = Flask(__name__)
 
 
-
 @app.route("/states_list", strict_slashes=False)
 def state():
     db = storage.all(State)
