@@ -8,7 +8,7 @@
     <H1>States</H1>
     <UL>
       {% for state in states|sort(attribute="name") %}
-      <LI> {{ state.id }}: <B>{{ state.name }}</B>
+      <LI>{{ state.id }}: <B>{{ state.name }}</B>
 	{% if cities %}
 	<H3>Cities:</H3>
 	<UL>
@@ -25,7 +25,7 @@
   </BODY>
   {% else %}
   <BODY>
-    <H1>File not found!</H1>
+    <H1>Not found!</H1>
   </BODY>
   {% endif %}
 </HTML>

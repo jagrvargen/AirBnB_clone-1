@@ -10,10 +10,9 @@ from models import State
 app = Flask(__name__)
 
 
-db = storage.all(State)
-
 @app.route("/states", strict_slashes=False)
 def states():
+    db = storage.all(State)
     states = []
     for key, value in db.items():
         states.append(value)
@@ -22,10 +21,10 @@ def states():
 
 @app.route("/states/<uuid:id>", strict_slashes=False)
 def cities_states(id=None):
+    db = storage.all(State)
     states = []
     cities = []
     for key, value in db.items():
-        print("check")
         if value.id == str(id):
             states.append(value)
             for city in value.cities:
