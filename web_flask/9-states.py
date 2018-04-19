@@ -21,16 +21,23 @@ def states():
 
 
 @app.route("/states/<uuid:id>", strict_slashes=False)
-def cities_states(id):
+def cities_states(id=None):
     states = []
     cities = []
     for key, value in db.items():
+        print("check")
         if value.id == str(id):
             states.append(value)
             for city in value.cities:
                 if city.state_id == value.id:
                     cities.append(city)
+
     return render_template("9-states.html", cities=cities, states=states)
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("9-states.html")
 
 
 @app.teardown_appcontext

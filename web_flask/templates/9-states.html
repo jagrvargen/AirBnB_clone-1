@@ -3,12 +3,14 @@
   <HEAD>
     <TITLE>HBNB</TITLE>
   </HEAD>
+  {% if states %}
   <BODY>
     <H1>States</H1>
     <UL>
       {% for state in states|sort(attribute="name") %}
       <LI> {{ state.id }}: <B>{{ state.name }}</B>
 	{% if cities %}
+	<H3>Cities:</H3>
 	<UL>
 	  {% for city in cities|sort(attribute="name") %}
 	  {% if city.state_id == state.id %}
@@ -21,4 +23,9 @@
     {% endfor %}
     </UL>
   </BODY>
+  {% else %}
+  <BODY>
+    <H1>File not found!</H1>
+  </BODY>
+  {% endif %}
 </HTML>
