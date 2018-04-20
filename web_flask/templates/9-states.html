@@ -5,7 +5,7 @@
   </HEAD>
   {% if states is defined %}
   <BODY>
-    {% if cities is none %}
+    {% if cities is not defined %}
     <H1>States</H1>
     <UL>
       {% for state in states|sort(attribute="name") %}
