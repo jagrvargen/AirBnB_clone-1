@@ -49,6 +49,16 @@ class testFileStorage(unittest.TestCase):
         key = str(self.my_model.__class__.__name__ + "." + self.my_model.id)
         self.assertTrue(key in self.storage._FileStorage__objects)
 
+    def test_delete_method(self):
+        '''
+           Tests that the delete method removes an object from the
+           FileStorage.__objects attribute.
+        '''
+        self.storage.new(self.my_model)
+        key = str(self.my_model.__class__.__name__ + "." + self.my_model.id)
+        self.storage.delete(self.my_model)
+        self.assertTrue(key not in self.storage._FileStorage__objects)
+
     def test_objects_value_type(self):
         '''
             Tests that the type of value contained in the FileStorage.__object
@@ -101,3 +111,14 @@ class testFileStorage(unittest.TestCase):
             self.assertTrue(True)
         except:
             self.assertTrue(False)
+
+    def test_delete(self):
+        '''
+           Tests that the delete method removes an object from __objects.
+        '''
+        dict_len = len(self.storage._FileStorage__objects)
+        self.storage.save()
+        self.storage.new(self.my_model)
+        self.storage.delete(self.my_model)
+        new_dict_len = len(self.storage._FileStorage__objects)
+        self.assertEqual(dict_len - new_dict_len, 1)
